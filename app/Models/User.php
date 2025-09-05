@@ -15,6 +15,9 @@ class User extends Authenticatable
         'name',
         'email',
         'role',
+        'phone',
+        'address',
+        'is_active',
         'password',
     ];
 
@@ -27,6 +30,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'is_active' => 'boolean',
             'password' => 'hashed',
         ];
     }
@@ -34,5 +38,10 @@ class User extends Authenticatable
     public function bookings()
     {
         return $this->hasMany(Booking::class);
+    }
+
+    public function wallet()
+    {
+        return $this->hasOne(Wallet::class);
     }
 }

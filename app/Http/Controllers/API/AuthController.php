@@ -33,7 +33,6 @@ class AuthController extends BaseController
 
     public function login(LoginRequest $request, AuthService $authService)
     {
-
         try {
             $result = $authService->login($request->validated());
 
@@ -56,9 +55,12 @@ class AuthController extends BaseController
     public function logout(Request $request, AuthService $authService): JsonResponse
     {
         try {
-            $authService->logout($request->user());
+            $user = $request->user();
 
-            return $this->successResponse('Logout successful.', [], 200);
+            if ($user && $user->currentAccessToken()) {
+                $user->currentAccessToken()->delete();
+            }
+            return $this->successResponse('Logged out successfully', [], 200);
         } catch (Exception $e) {
             return $this->errorResponse('Logout failed: '.$e->getMessage(), 500);
         }

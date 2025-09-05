@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Wallet;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 
-class RegisterRequest extends FormRequest
+class WalletSendRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -24,16 +24,11 @@ class RegisterRequest extends FormRequest
         parent::FailedValidationTrait($validator);
     }
 
-
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'role' => ['sometimes', 'in:USER,AGENT'], // default customer হবে
-            'phone' => ['required', 'string', 'min:8', 'unique:users,phone'],
-            'address' => ['required', 'string', 'min:5'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'receiver_phone' => ['required', 'string', 'max:20'],
+            'amount' => ['nullable', 'numeric', 'min:0', 'max:99999999.99'],
         ];
     }
 }

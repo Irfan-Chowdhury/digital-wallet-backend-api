@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 
-class RegisterRequest extends FormRequest
+class ProfileRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -24,16 +24,13 @@ class RegisterRequest extends FormRequest
         parent::FailedValidationTrait($validator);
     }
 
-
     public function rules(): array
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'role' => ['sometimes', 'in:USER,AGENT'], // default customer হবে
-            'phone' => ['required', 'string', 'min:8', 'unique:users,phone'],
+            'phone' => ['required', 'string', 'min:8'],
             'address' => ['required', 'string', 'min:5'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ];
     }
 }

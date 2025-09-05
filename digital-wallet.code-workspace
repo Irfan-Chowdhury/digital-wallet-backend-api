@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"path": "app"
+		},
+		{
+			"path": "bootstrap"
+		},
+		{
+			"path": "config"
+		},
+		{
+			"path": "database"
+		},
+		{
+			"path": "routes"
+		},
+		{
+			"path": "../digital-wallet-frontend/src"
+		},
+		{
+			"path": "../../../Mission-5/Module-34/digital-wallet-api/src_b"
+		}
+	]
+}

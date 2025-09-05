@@ -17,13 +17,11 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        Booking::truncate();
-        Service::truncate();
+        // Booking::truncate();
+        // Service::truncate();
         User::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $this->call(UserSeeder::class);
-        $this->call(ServiceSeeder::class);
-        $this->call(BookingSeeder::class);
     }
 }

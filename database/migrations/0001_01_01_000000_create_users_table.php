@@ -17,8 +17,11 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->enum('role', [UserRole::ADMIN->value, UserRole::CUSTOMER->value])->default(UserRole::CUSTOMER);
+            $table->enum('role', [UserRole::ADMIN->value, UserRole::USER->value, UserRole::AGENT->value])->default(UserRole::USER);
+            $table->string('phone');
+            $table->text('address');
             $table->string('password');
+            $table->boolean('is_active')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });

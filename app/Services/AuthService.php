@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Models\User;
+use App\Models\Wallet;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,8 +20,14 @@ class AuthService
 
             $user = User::create($data);
 
+            Wallet::create([
+                'user_id' => $user->id,
+                'balance' => 50.00,
+                'is_block' => false
+            ]);
+
             return [
-                'token' => $user->createToken('ServiceBookingApp')->plainTextToken,
+                'token' => $user->createToken('dw_token')->plainTextToken,
                 'user' => $user,
             ];
         });
@@ -33,7 +40,7 @@ class AuthService
         }
 
         $user = Auth::user();
-        $token = $user->createToken('ServiceBookingApp')->plainTextToken;
+        $token = $user->createToken('dw_token')->plainTextToken;
 
         return [
             'token' => $token,
@@ -44,5 +51,17 @@ class AuthService
     public function logout($user): void
     {
         $user->currentAccessToken()->delete();
+    }
+
+    public function profileUpdate(array $data, int $userId)
+    {
+        return DB::transaction(function () use ($data, $userId) {
+
+            $user = User::find($userId);
+
+            $user->update($data);
+
+            return $user;
+        });
     }
 }
