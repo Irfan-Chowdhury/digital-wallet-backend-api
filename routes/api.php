@@ -16,12 +16,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
 
+
+    Route::get('/user/dashboard', [UserController::class, 'dashboard'])->middleware('auth:sanctum');
+
     Route::get('/user/all-users', [UserController::class, 'index'])->middleware('auth:sanctum', 'role:ADMIN');
     Route::patch('/user/{id}/status', [UserController::class, 'statusChange'])->middleware('auth:sanctum', 'role:ADMIN');
 
 
-    Route::get('/user/profile', [UserController::class, 'profile'])->middleware('auth:sanctum');
-    Route::put('/user/profile', [UserController::class, 'profileUpdate'])->middleware('auth:sanctum');
+    Route::get('/user/profile', [UserController::class, 'profile'])->middleware('auth:sanctum'); //new
+    Route::put('/user/profile', [UserController::class, 'profileUpdate'])->middleware('auth:sanctum'); //new
 
 
 

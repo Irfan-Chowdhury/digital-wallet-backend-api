@@ -30,7 +30,7 @@ class ProfileRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'min:8'],
             'address' => ['required', 'string', 'min:5'],
-            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'password' => ['nullable', 'string', 'min:5', 'confirmed'],
         ];
     }
 }

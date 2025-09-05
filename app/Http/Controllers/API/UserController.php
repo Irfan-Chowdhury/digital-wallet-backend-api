@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\ProfileRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Models\Wallet;
 use App\Services\AuthService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -16,6 +17,34 @@ use Illuminate\Support\Facades\Log;
 
 class UserController extends BaseController
 {
+
+    public function dashboard()
+    {
+        try {
+            $wallet = Wallet::where('user_id', auth()->user()->id)->first();
+
+            $depositTotal = $wallet->transactions()->where('type', 'deposit')->sum('amount');
+            $withdrawTotal = $wallet->transactions()->where('type', 'withdraw')->sum('amount');
+            $sendMoneyTotal = $wallet->transactions()->where('type', 'send-money')->sum('amount');
+
+
+            $data = [
+                'walletRemainingBalance' => $wallet->balance,
+                'deposit' => $depositTotal,
+                'withdraw' => $withdrawTotal,
+                'sendMoney' => $sendMoneyTotal,
+            ];
+
+            return $this->successResponse(
+            'Data retrieved successfully',
+            $data,
+            200
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse('Failed to retrieve users: '.$e->getMessage(), $e->getCode() ?: 500);
+        }
+    }
+
     public function index()
     {
         try {

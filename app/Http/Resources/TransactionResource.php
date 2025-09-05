@@ -26,23 +26,6 @@ class TransactionResource extends JsonResource
         $recipient = $this->to;
         $type = $this->type;
 
-        // Check if recipient is numeric → means it's a user_id
-        // if (is_numeric($recipient) && $type !== 'deposit') {
-        //     $user = User::select('id','name','email','phone')->find($recipient);
-        //     $recipientData = $user ? [
-        //         'id'    => $user->id,
-        //         'name'  => $user->name,
-        //         'email' => $user->email,
-        //         'phone' => $user->phone,
-        //     ] : null;
-        // }
-        // else if(is_numeric($recipient) && $type === 'deposit') {
-        //     $recipientData = 'self';
-        // }
-        // else {
-        //     $recipientData = $recipient; // keep as string (like "external-source")
-        // }
-        
         if (is_numeric($recipient)) {
             if ($type === 'deposit') {
                 // Deposit to self
