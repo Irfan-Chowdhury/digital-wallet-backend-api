@@ -8,19 +8,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class TransactionResource extends JsonResource
 {
-    // public function toArray(Request $request): array
-    // {
-    //     return [
-    //         'id'  => $this->id,
-    //         'sendFrom'  => $this->from,
-    //         // 'sendTo'  => $this->to,
-    //         'recipient'  => $this->to,
-    //         'amount'  => $this->amount,
-    //         'type'  => $this->type,
-    //         'createdAt' => $this->created_at->toDateString()
-    //     ];
-    // }
-
     public function toArray(Request $request): array
     {
         $recipient = $this->to;
@@ -47,6 +34,7 @@ class TransactionResource extends JsonResource
             'recipient' => $recipientData,
             'amount'    => $this->amount,
             'type'      => $this->type,
+            'status'      => $this->status,
             'createdAt' => $this->created_at->toDateString(),
         ];
     }

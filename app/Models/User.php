@@ -44,4 +44,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Wallet::class);
     }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return date('Y-m-d', strtotime($value));
+    }
 }

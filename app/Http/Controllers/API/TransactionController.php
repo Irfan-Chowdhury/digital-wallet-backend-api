@@ -25,4 +25,37 @@ class TransactionController extends BaseController
             return $this->errorResponse('Retrieve failed : '.$e->getMessage(), $e->getCode() ?: 500);
         }
     }
+
+    public function adminTransaction(TransactionService $transactionService)
+    {
+        try {
+            $transactions = $transactionService->getAdminTransaction();
+
+            return $this->successResponse(
+                'Transaction Retrieve successfully',
+                TransactionResource::collection($transactions),
+                201
+            );
+
+        } catch (Exception $e) {
+            return $this->errorResponse('Retrieve failed : '.$e->getMessage(), $e->getCode() ?: 500);
+        }
+    }
+
+    public function adminListing(TransactionService $transactionService)
+    {
+        try {
+            $transactions = $transactionService->getAdminListing();
+
+            return $this->successResponse(
+                'Transaction Retrieve successfully',
+                // TransactionResource::collection($transactions),
+                $transactions,
+                201
+            );
+
+        } catch (Exception $e) {
+            return $this->errorResponse('Retrieve failed : '.$e->getMessage(), $e->getCode() ?: 500);
+        }
+    }
 }

@@ -21,6 +21,14 @@ Route::prefix('v1')->group(function () {
     Route::get('/agent/dashboard', [UserController::class, 'AgentDashboard'])->middleware('auth:sanctum'); // new
 
 
+    Route::prefix('admin')->group( function () {
+        // Route::get('/dashboard', [UserController::class, 'AgentDashboard'])->middleware('auth:sanctum'); // new
+        Route::get('/transactions', [TransactionController::class, 'adminTransaction'])->middleware('auth:sanctum'); // new
+        // Route::get('/listing', [TransactionController::class, 'adminListing'])->middleware('auth:sanctum'); // new
+        Route::get('/listings', [TransactionController::class, 'adminListing']); // new
+    });
+
+
     Route::get('/user/all-users', [UserController::class, 'index'])->middleware('auth:sanctum', 'role:ADMIN');
     Route::patch('/user/{id}/status', [UserController::class, 'statusChange'])->middleware('auth:sanctum', 'role:ADMIN');
 

@@ -20,4 +20,13 @@ class TransactionService
     {
         return Transaction::where('user_id', auth()->user()->id)->get();
     }
+
+    public function getAdminTransaction()
+    {
+        return Transaction::whereIn('type', ['cash-in', 'cash-out'])->get();
+    }
+    public function getAdminListing()
+    {
+        return User::select('id','name','role','created_at')->with('wallet:id,user_id,balance,is_block,status')->whereIn('role', ['USER', 'AGENT'])->get();
+    }
 }
