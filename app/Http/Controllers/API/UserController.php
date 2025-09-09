@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 
 class UserController extends BaseController
@@ -33,6 +34,49 @@ class UserController extends BaseController
                 'deposit' => $depositTotal,
                 'withdraw' => $withdrawTotal,
                 'sendMoney' => $sendMoneyTotal,
+            ];
+
+            return $this->successResponse(
+            'Data retrieved successfully',
+            $data,
+            200
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse('Failed to retrieve users: '.$e->getMessage(), $e->getCode() ?: 500);
+        }
+    }
+
+    public function AgentDashboard()
+    {
+        try {
+
+            $wallet = Wallet::with(['transactions' => fn($q) => $q
+                ->select('id', 'wallet_id', 'type', 'amount', 'from', 'to', DB::raw("DATE_FORMAT(created_at, '%Y-%m-%d') as created_at"))
+                ->orderBy('id','DESC')->limit(10)
+            ])
+            ->where('user_id', auth()->id())
+            ->first();
+
+
+            $cashInTotal = $wallet->transactions()->where('type', 'cash-in')->sum('amount');
+            $cashOutTotal = $wallet->transactions()->where('type', 'cash-out')->sum('amount');
+
+
+            $data = [
+                'walletRemainingBalance' => (float)$wallet->balance,
+                'cashIn' => (float)$cashInTotal,
+                'cashOut' => (float)$cashOutTotal,
+                'transactions' => $wallet->transactions->map(function ($row) {
+                    $userId = $row->type==='cash-in' ? (int)$row->to : (int) $row->from;
+
+                    return [
+                        'id' => $row->id,
+                        'type' => $row->type,
+                        'amount' => $row->amount,
+                        'created_at' => $row->created_at->format('Y-m-d'), // formatted date
+                        'userPhone' => User::find($userId)->phone
+                    ];
+                })
             ];
 
             return $this->successResponse(

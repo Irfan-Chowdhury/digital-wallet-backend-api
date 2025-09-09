@@ -26,4 +26,10 @@ class Wallet extends Model
     {
         return $this->hasMany(Transaction::class);
     }
+
+    // Accessor for formatted created_at
+    public function getCreatedAtAttribute($value)
+    {
+        return date('Y-m-d', strtotime($value));
+    }
 }

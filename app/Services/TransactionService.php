@@ -16,9 +16,8 @@ use App\Enum\TransactionType;
 
 class TransactionService
 {
-    public function geyUserTransaction()
+    public function geyUserOrAgentTransaction()
     {
         return Transaction::where('user_id', auth()->user()->id)->get();
     }
-
 }

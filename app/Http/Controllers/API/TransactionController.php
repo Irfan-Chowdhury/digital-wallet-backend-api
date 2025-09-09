@@ -10,10 +10,10 @@ use Illuminate\Http\Request;
 
 class TransactionController extends BaseController
 {
-    public function userTransactionHistory(TransactionService $transactionService)
+    public function userOrAgentTransactionHistory(TransactionService $transactionService)
     {
         try {
-            $transactions = $transactionService->geyUserTransaction();
+            $transactions = $transactionService->geyUserOrAgentTransaction();
 
             return $this->successResponse(
                 'Transaction Retrieve successfully',

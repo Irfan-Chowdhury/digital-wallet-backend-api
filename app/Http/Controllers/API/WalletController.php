@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Enum\TransactionStatus;
 use App\Enum\TransactionType;
+use App\Http\Requests\Wallet\CashInRequest;
+use App\Http\Requests\Wallet\CashOutRequest;
 use App\Http\Requests\Wallet\WalletSendRequest;
 use App\Http\Requests\Wallet\WalletWithdrawRequest;
 use App\Http\Requests\Wallet\WalletDepositRequest;
@@ -68,5 +70,38 @@ class WalletController extends BaseController
         }
     }
 
+    public function cashIn(CashInRequest $request, WalletService $walletService)
+    {
+        try {
+            $wallet = $walletService->cashIn($request->validated());
+
+            return $this->successResponse(
+                'Cash In successfully',
+                // new WalletResource($wallet),
+                $wallet,
+                201
+            );
+
+        } catch (Exception $e) {
+            return $this->errorResponse('Sending failed : '.$e->getMessage(), $e->getCode() ?: 500);
+        }
+    }
+
+    public function cashOut(CashOutRequest $request, WalletService $walletService)
+    {
+        try {
+            $wallet = $walletService->cashOut($request->validated());
+
+            return $this->successResponse(
+                'Cash Out successfully',
+                // new WalletResource($wallet),
+                $wallet,
+                201
+            );
+
+        } catch (Exception $e) {
+            return $this->errorResponse('Sending failed : '.$e->getMessage(), (int)$e->getCode() ?: 500);
+        }
+    }
 
 }

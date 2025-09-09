@@ -18,6 +18,8 @@ Route::prefix('v1')->group(function () {
 
 
     Route::get('/user/dashboard', [UserController::class, 'dashboard'])->middleware('auth:sanctum');
+    Route::get('/agent/dashboard', [UserController::class, 'AgentDashboard'])->middleware('auth:sanctum'); // new
+
 
     Route::get('/user/all-users', [UserController::class, 'index'])->middleware('auth:sanctum', 'role:ADMIN');
     Route::patch('/user/{id}/status', [UserController::class, 'statusChange'])->middleware('auth:sanctum', 'role:ADMIN');
@@ -37,13 +39,19 @@ Route::prefix('v1')->group(function () {
 
 
     Route::prefix('wallet')->group( function () {
+        //User
         Route::patch('/add-money', [WalletController::class, 'addMoney'])->middleware('auth:sanctum');
         Route::patch('/withdraw-money', [WalletController::class, 'withdrawMoney'])->middleware('auth:sanctum');
         Route::post('/send-money', [WalletController::class, 'sendMoney'])->middleware('auth:sanctum');
+
+        // Agent
+        Route::post('/cash-in', [WalletController::class, 'cashIn'])->middleware('auth:sanctum');
+        Route::post('/cash-out', [WalletController::class, 'cashOut'])->middleware('auth:sanctum');
+
     });
 
     Route::prefix('transaction')->group( function () {
-        Route::get('/my-transactions', [TransactionController::class, 'userTransactionHistory'])->middleware('auth:sanctum');
+        Route::get('/my-transactions', [TransactionController::class, 'userOrAgentTransactionHistory'])->middleware('auth:sanctum');
     });
 
 
