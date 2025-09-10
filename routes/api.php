@@ -19,6 +19,7 @@ Route::prefix('v1')->group(function () {
 
     Route::get('/user/dashboard', [UserController::class, 'dashboard'])->middleware('auth:sanctum');
     Route::get('/agent/dashboard', [UserController::class, 'AgentDashboard'])->middleware('auth:sanctum'); // new
+    Route::get('/admin/dashboard', [UserController::class, 'AdminDashboard'])->middleware('auth:sanctum'); // new
 
 
     Route::prefix('admin')->group( function () {

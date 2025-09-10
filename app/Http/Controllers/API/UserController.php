@@ -6,6 +6,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\ProfileRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\UserResource;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Wallet;
 use App\Services\AuthService;
@@ -77,6 +78,37 @@ class UserController extends BaseController
                         'userPhone' => User::find($userId)->phone
                     ];
                 })
+            ];
+
+            return $this->successResponse(
+            'Data retrieved successfully',
+            $data,
+            200
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse('Failed to retrieve users: '.$e->getMessage(), $e->getCode() ?: 500);
+        }
+    }
+
+    public function AdminDashboard()
+    {
+        try {
+
+            $userCount = User::select('role', DB::raw('COUNT(*) as total'))
+            ->whereIn('role', ['USER', 'AGENT'])
+            ->groupBy('role')
+            ->pluck('total','role');
+
+            // $totalTransactions = Transaction::count();
+            // $totalVolume = Transaction::sum('amount');
+
+            $stats = Transaction::selectRaw('COUNT(*) as totalTransactions, SUM(amount) as totalVolume')->first();
+
+            $data = [
+                'totalUsers' => $userCount['USER'],
+                'totalAgents' => $userCount['AGENT'],
+                'totalTransactions' => $stats->totalTransactions,
+                'totalVolume' => $stats->totalVolume
             ];
 
             return $this->successResponse(

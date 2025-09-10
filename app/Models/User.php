@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -32,6 +33,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'is_active' => 'boolean',
             'password' => 'hashed',
+            'created_at' => 'datetime:Y-m-d'
         ];
     }
 
@@ -45,8 +47,19 @@ class User extends Authenticatable
         return $this->hasOne(Wallet::class);
     }
 
+    // public function getCreatedAtAttribute($value)
+    // {
+    //     return date('Y-m-d', strtotime($value));
+    // }
+
     public function getCreatedAtAttribute($value)
     {
-        return date('Y-m-d', strtotime($value));
+        return Carbon::parse($value);
     }
+
+    protected function serializeDate(\DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d');
+    }
+
 }
