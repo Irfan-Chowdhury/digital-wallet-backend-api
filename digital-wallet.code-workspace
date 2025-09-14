@@ -19,7 +19,7 @@
 			"path": "../digital-wallet-frontend/src"
 		},
 		{
-			"path": "../../../Mission-5/Module-34/digital-wallet-api/src_b"
+			"path": "../digital-wallet-backend-express"
 		}
 	]
 }
