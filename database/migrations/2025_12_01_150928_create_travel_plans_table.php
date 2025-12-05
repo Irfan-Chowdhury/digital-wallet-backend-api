@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer('budget')->nullable();
             $table->string('travel_type')->nullable();
 
-            $table->json('itinerary')->nullable();
+            $table->text('itinerary')->nullable();
             $table->integer('group_size')->default(1);
 
             $table->enum('status', ['active', 'completed', 'cancelled'])->default('active');
