@@ -2,24 +2,34 @@
 
 namespace App\Models;
 
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+// use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Carbon\Carbon;
-
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
     protected $fillable = [
         'name',
         'email',
-        'role',
-        'phone',
-        'address',
-        'is_active',
         'password',
+        'role',
+        'image_url',
+        'cover_url',
+        'location',
+        'age',
+        'bio',
+        'rating_avg',
+        'rating_count'
     ];
 
     protected $hidden = [
@@ -31,35 +41,38 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'is_active' => 'boolean',
             'password' => 'hashed',
-            'created_at' => 'datetime:Y-m-d'
         ];
     }
 
-    public function bookings()
-    {
-        return $this->hasMany(Booking::class);
+    public function profile(){
+        // return $this->hasOne(UserProfile::class);
     }
 
-    public function wallet()
-    {
-        return $this->hasOne(Wallet::class);
-    }
-
-    // public function getCreatedAtAttribute($value)
-    // {
-    //     return date('Y-m-d', strtotime($value));
+    // public function interests(): HasMany {
+    //     return $this->hasMany(UserInterest::class);
     // }
 
-    public function getCreatedAtAttribute($value)
+    public function interests()
     {
-        return Carbon::parse($value);
+        return $this->belongsToMany(
+            Interest::class,
+            'user_interests',
+            'user_id',
+            'interest_id'
+        );
     }
 
-    protected function serializeDate(\DateTimeInterface $date)
-    {
-        return $date->format('Y-m-d');
+
+    public function travelPlans() {
+        // return $this->hasMany(TravelPlan::class);
     }
 
+    public function bookings() {
+        return $this->hasMany(PlanBooking::class);
+    }
+
+    public function payments() {
+        return $this->hasMany(Payment::class);
+    }
 }

@@ -99,9 +99,6 @@ class UserController extends BaseController
             ->groupBy('role')
             ->pluck('total','role');
 
-            // $totalTransactions = Transaction::count();
-            // $totalVolume = Transaction::sum('amount');
-
             $stats = Transaction::selectRaw('COUNT(*) as totalTransactions, SUM(amount) as totalVolume')->first();
 
             $data = [

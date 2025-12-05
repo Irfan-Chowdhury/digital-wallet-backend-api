@@ -1,6 +1,5 @@
 <?php
 
-use App\Enum\UserRole;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,12 +15,16 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->enum('role', ['user', 'admin'])->default('user');
+            $table->string('avatar_url')->nullable()->default('https://i.pravatar.cc/300');
+            $table->string('cover_url')->nullable();
+            $table->string('location')->nullable();
+            $table->integer('age')->nullable();
+            $table->text('bio')->nullable();
+            $table->float('rating_avg', 3, 2)->default(0);
+            $table->integer('rating_count')->default(0);
             $table->timestamp('email_verified_at')->nullable();
-            $table->enum('role', [UserRole::ADMIN->value, UserRole::USER->value, UserRole::AGENT->value])->default(UserRole::USER);
-            $table->string('phone');
-            $table->text('address');
             $table->string('password');
-            $table->boolean('is_active')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });
